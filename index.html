@@ -1121,22 +1121,7 @@
             <div id="home-content" class="content-section active">
                 <div class="about-me">
                     <h2>About Me</h2>
-
-                    <p>
-                        I'm an AI and technology leader with a Ph.D. in Robotics and Human-Machine Interaction from Northwestern University. My work sits at the intersection of intelligence, hardware, and real-world deployment. During my Ph.D., I pioneered wideband tactile rendering systems and breakthrough algorithms for low-SNR electromechanical devices, publishing in Nature and other leading journals. My research helped redefine how machines reproduce realistic physical sensation - translating deep science into functional systems.
-                    </p>
-                    
-                    <p>
-                        Since then, I've led the design and deployment of intelligent systems across embedded platforms, wireless infrastructure, and edge AI devices. At Axon, I drove the development of a next-generation drone firmware stack, secure evidence pipelines, inter-device communication, and hardware-in-the-loop simulation infrastructure. I also spearheaded real-time computer vision and ballistic estimation capabilities on embedded hardware - bringing advanced AI into mission-critical environments. Previously, I built large-scale real-time DSP systems serving 100k+ wireless customers and led analytics deployments directly onto customer edge devices. At Tanvas, I designed ML and signal processing algorithms that doubled haptic accuracy on constrained SoCs.
-                    </p>
-                    
-                    <p>
-                        I lead with a systems mindset - aligning research, architecture, and product execution to create durable technological advantage. I'm fluent across the stack, from embedded C and Rust to high-performance C++ and ML pipelines in Python, deploying with CUDA, TensorRT, ONNX, and edge AI toolchains.
-                    </p>
-
-                    <p>
-                        My focus is simple: drive innovation that moves from whiteboard to deployed reality - building intelligent systems that are technically deep, commercially viable, and hard to replicate.
-                    </p>
+                    <div id="about-me-content"></div>
 
                 </div>
             </div>
@@ -1541,8 +1526,22 @@
             }
         }
 
+        async function loadAboutMe() {
+            const container = document.getElementById('about-me-content');
+            if (!container) return;
+
+            try {
+                const res = await fetch('content/about-me.html', { cache: 'no-cache' });
+                if (!res.ok) throw new Error('Failed to load about-me.html');
+                container.innerHTML = await res.text();
+            } catch (e) {
+                container.innerHTML = '<p>About Me content failed to load.</p>';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             openTopProjectDetails();
+            loadAboutMe();
         });
 
     </script>
