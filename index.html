@@ -1328,49 +1328,60 @@
                 <div class="grid-2" style="display: flex; flex-direction: column; gap: 1rem;">
                     <div class="card">
                         <h3>Virtual presence</h3>
-                        <p>VR-focused reconstruction work for mapping and replaying dynamic real-world scenes.</p>
-                        <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
-                            <a href="https://github.com/Vipresz/SamsungGear360" target="_blank" style="color: var(--color-gold); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fab fa-github"></i>
-                                SamsungGear360 Repository
-                            </a>
+                        <div style="margin-top: 0.75rem;">
+                            <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Project overview</h4>
+                            <p style="line-height: 1.6;">VR-focused reconstruction work for mapping and replaying dynamic real-world scenes.</p>
                         </div>
-                        <details open style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
-                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Mapping of Dynamic Oobjects</summary>
+
+                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project media</summary>
                             <div style="margin-top: 0.9rem;">
-                                <p style="line-height: 1.6;">We are trying to recreate moving objects in VR from real-world capture, preserving both geometry and temporal motion so dynamic scenes can be replayed naturally in immersive environments.</p>
-                                <div style="margin-top: 1rem;">
-                                    <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Ouster LiDAR + 360 Camera Fusion</h4>
-                                    <p style="line-height: 1.6;">We combine Ouster LiDAR depth with synchronized 360 camera imagery to compute a point cloud with per-point pixel color. This lets us stitch spatial and visual data together into a coherent mesh for richer VR scene reconstruction.</p>
-                                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
-                                        <img src="images/projects/vipres/ouster/image.png" alt="Ouster LiDAR and 360 camera fusion image 1" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                        <img src="images/projects/vipres/ouster/image2.png" alt="Ouster LiDAR and 360 camera fusion image 2" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                        <img src="images/projects/vipres/ouster/image3.jpg" alt="Ouster LiDAR and 360 camera fusion image 3" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    </div>
+                                <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Ouster LiDAR + 360 Camera Fusion</h4>
+                                <p style="line-height: 1.6;">We combine Ouster LiDAR depth with synchronized 360 camera imagery to compute a point cloud with per-point pixel color. This lets us stitch spatial and visual data together into a coherent mesh for richer VR scene reconstruction.</p>
+                                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
+                                    <img src="images/projects/vipres/ouster/image.png" alt="Ouster LiDAR and 360 camera fusion image 1" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    <img src="images/projects/vipres/ouster/image2.png" alt="Ouster LiDAR and 360 camera fusion image 2" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    <img src="images/projects/vipres/ouster/image3.jpg" alt="Ouster LiDAR and 360 camera fusion image 3" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
                                 </div>
+
+                                <h4 style="margin: 1.25rem 0 0.5rem; color: var(--color-gold);">Dynamic object mapping</h4>
+                                <p style="line-height: 1.6;">We recreate moving objects in VR from real-world capture, preserving both geometry and temporal motion so dynamic scenes can be replayed naturally in immersive environments.</p>
                                 <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
                                     <img src="images/projects/vipres/image1.png" alt="Dynamic object mapping capture image 1" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
                                     <img src="images/projects/vipres/image2.png" alt="Dynamic object mapping capture image 2" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
                                     <img src="images/projects/vipres/image3.png" alt="Dynamic object mapping capture image 3" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
                                 </div>
-                                <div style="margin-top: 1rem;">
-                                    <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Project specifics</h4>
-                                    <p style="line-height: 1.6;">This part of the project focuses on working with a 360 camera pipeline, where camera calibration, lens handling, and projection consistency are critical for reliable reconstruction and VR playback quality.</p>
-                                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
-                                        <img src="images/projects/vipres/proj/single_lens.png" alt="Single lens 360 capture setup" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                        <img src="images/projects/vipres/proj/single_lens_equarectangular.png" alt="Single lens equirectangular projection" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                        <img src="images/projects/vipres/proj/single_lens_rectalinear.png" alt="Single lens rectilinear projection" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    </div>
+
+                                <h4 style="margin: 1.25rem 0 0.5rem; color: var(--color-gold);">Project specifics (360 camera)</h4>
+                                <p style="line-height: 1.6;">Working with a 360 camera pipeline where calibration, lens handling, and projection consistency are critical for reliable reconstruction and VR playback quality.</p>
+                                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
+                                    <img src="images/projects/vipres/proj/single_lens.png" alt="Single lens 360 capture setup" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    <img src="images/projects/vipres/proj/single_lens_equarectangular.png" alt="Single lens equirectangular projection" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    <img src="images/projects/vipres/proj/single_lens_rectalinear.png" alt="Single lens rectilinear projection" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
                                 </div>
+                            </div>
+                        </details>
+
+                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project links</summary>
+                            <div style="margin-top: 0.9rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                                <a href="https://github.com/Vipresz/SamsungGear360" target="_blank" style="color: var(--color-gold); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fab fa-github"></i>
+                                    SamsungGear360 Repository
+                                </a>
                             </div>
                         </details>
                     </div>
 
                     <div class="card">
                         <h3>Haptic touchscreens</h3>
-                        <p>Research and engineering work enabling rich tactile feedback on touchscreen surfaces.</p>
+                        <div style="margin-top: 0.75rem;">
+                            <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Project overview</h4>
+                            <p style="line-height: 1.6;">Research and engineering work enabling rich tactile feedback on touchscreen surfaces.</p>
+                        </div>
+
                         <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
-                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Details</summary>
+                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project media</summary>
                             <div style="margin-top: 0.9rem;">
                                 <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Presentations</h4>
                                 <div style="margin-top: 0.75rem;">
@@ -1384,26 +1395,49 @@
                                 <p style="line-height: 1.6;">System design and implementation details covering sensing, actuation, signal processing, and real-time control needed to create convincing tactile experiences on touchscreen hardware.</p>
                             </div>
                         </details>
+
+                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project links</summary>
+                            <div style="margin-top: 0.9rem;">
+                                <p style="line-height: 1.6; color: var(--color-text-light); margin-bottom: 0;">Links coming soon.</p>
+                            </div>
+                        </details>
                     </div>
 
                     <div class="card">
                         <h3>RL Learning</h3>
-                        <p>Reinforcement learning projects focusing on control systems and autonomous decision-making. Includes cart-pendulum balancing and car racing environments.</p>
-                        <div style="margin-top: 1rem;">
-                            <span style="background: var(--color-gold); color: var(--color-black); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.5rem;">Python</span>
-                            <span style="background: var(--color-gold); color: var(--color-black); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.5rem;">TensorFlow</span>
-                            <span style="background: var(--color-gold); color: var(--color-black); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem;">AI</span>
+                        <div style="margin-top: 0.75rem;">
+                            <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Project overview</h4>
+                            <p style="line-height: 1.6;">Reinforcement learning projects focusing on control systems and autonomous decision-making, including cart-pendulum balancing and car racing environments.</p>
                         </div>
-                        <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center;">
-                            <a href="https://github.com/BeautifulDigits/cart_pendulm/blob/main/cart_balancing.py" target="_blank" style="color: var(--color-gold); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fab fa-github"></i>
-                                Cart Pendulum
-                            </a>
-                            <a href="https://github.com/BeautifulDigits/car_racing_RL" target="_blank" style="color: var(--color-gold); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fab fa-github"></i>
-                                Car Racing RL
-                            </a>
-                        </div>
+
+                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project media</summary>
+                            <div style="margin-top: 0.9rem;">
+                                <p style="line-height: 1.6; color: var(--color-text-light); margin-bottom: 0;">Media coming soon.</p>
+                            </div>
+                        </details>
+
+                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                            <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project links</summary>
+                            <div style="margin-top: 0.9rem;">
+                                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                                    <a href="https://github.com/BeautifulDigits/cart_pendulm/blob/main/cart_balancing.py" target="_blank" style="color: var(--color-gold); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fab fa-github"></i>
+                                        Cart Pendulum
+                                    </a>
+                                    <a href="https://github.com/BeautifulDigits/car_racing_RL" target="_blank" style="color: var(--color-gold); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fab fa-github"></i>
+                                        Car Racing RL
+                                    </a>
+                                </div>
+                                <div style="margin-top: 0.9rem;">
+                                    <span style="background: var(--color-gold); color: var(--color-black); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.5rem;">Python</span>
+                                    <span style="background: var(--color-gold); color: var(--color-black); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.5rem;">TensorFlow</span>
+                                    <span style="background: var(--color-gold); color: var(--color-black); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem;">AI</span>
+                                </div>
+                            </div>
+                        </details>
                     </div>
                     
                     
@@ -1470,13 +1504,6 @@
     </div>
 
     <script>
-        function openTopProjectDetails() {
-            const topProjectDetails = document.querySelector('#projects-content .card:first-child details');
-            if (topProjectDetails) {
-                topProjectDetails.open = true;
-            }
-        }
-
         function showContent(section) {
             // Hide all content sections
             const contentSections = document.querySelectorAll('.content-section');
@@ -1499,9 +1526,6 @@
                 workHistoryIcon.style.transform = 'rotate(0deg)';
             }
 
-            if (section === 'projects') {
-                openTopProjectDetails();
-            }
         }
 
         function openImageModal(src, alt) {
@@ -1560,7 +1584,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            openTopProjectDetails();
             loadAboutMe();
         });
 
