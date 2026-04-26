@@ -1000,6 +1000,56 @@
             h3 { font-size: 1.4rem; }
             h4 { font-size: 1.2rem; }
         }
+
+        /* Horizontal, scrollable project media strip */
+        .media-strip {
+            display: flex;
+            gap: 0.9rem;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            padding: 0.25rem 0.2rem 0.6rem;
+        }
+
+        .media-strip::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .media-strip::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 999px;
+        }
+
+        .media-strip::-webkit-scrollbar-thumb {
+            background: rgba(139, 157, 195, 0.55);
+            border-radius: 999px;
+        }
+
+        .media-item {
+            flex: 0 0 auto;
+            width: min(420px, 82vw);
+            scroll-snap-align: start;
+        }
+
+        .media-frame {
+            width: 100%;
+            border-radius: 10px;
+            border: 2px solid var(--color-gold);
+            background: rgba(0, 0, 0, 0.35);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        img.media-frame {
+            height: 258px;
+            object-fit: cover;
+        }
+
+        .media-caption {
+            margin-top: 0.45rem;
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
     </style>
 </head>
 <body>
@@ -1333,31 +1383,49 @@
                             <p style="line-height: 1.6;">VR-focused reconstruction work for mapping and replaying dynamic real-world scenes.</p>
                         </div>
 
-                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                        <details open style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
                             <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project media</summary>
                             <div style="margin-top: 0.9rem;">
                                 <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Ouster LiDAR + 360 Camera Fusion</h4>
                                 <p style="line-height: 1.6;">We combine Ouster LiDAR depth with synchronized 360 camera imagery to compute a point cloud with per-point pixel color. This lets us stitch spatial and visual data together into a coherent mesh for richer VR scene reconstruction.</p>
-                                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
-                                    <img src="images/projects/vipres/ouster/image.png" alt="Ouster LiDAR and 360 camera fusion image 1" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    <img src="images/projects/vipres/ouster/image2.png" alt="Ouster LiDAR and 360 camera fusion image 2" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    <img src="images/projects/vipres/ouster/image3.jpg" alt="Ouster LiDAR and 360 camera fusion image 3" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                <div class="media-strip" style="margin-top: 0.8rem;">
+                                    <div class="media-item">
+                                        <img src="images/projects/vipres/ouster/image.png" alt="Ouster LiDAR and 360 camera fusion image 1" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
+                                    <div class="media-item">
+                                        <img src="images/projects/vipres/ouster/image2.png" alt="Ouster LiDAR and 360 camera fusion image 2" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
+                                    <div class="media-item">
+                                        <img src="images/projects/vipres/ouster/image3.jpg" alt="Ouster LiDAR and 360 camera fusion image 3" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
                                 </div>
 
                                 <h4 style="margin: 1.25rem 0 0.5rem; color: var(--color-gold);">Dynamic object mapping</h4>
                                 <p style="line-height: 1.6;">We recreate moving objects in VR from real-world capture, preserving both geometry and temporal motion so dynamic scenes can be replayed naturally in immersive environments.</p>
-                                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
-                                    <img src="images/projects/vipres/image1.png" alt="Dynamic object mapping capture image 1" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    <img src="images/projects/vipres/image2.png" alt="Dynamic object mapping capture image 2" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    <img src="images/projects/vipres/image3.png" alt="Dynamic object mapping capture image 3" style="width: 258px; height: 258px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                <div class="media-strip" style="margin-top: 0.8rem;">
+                                    <div class="media-item">
+                                        <img src="images/projects/vipres/image1.png" alt="Dynamic object mapping capture image 1" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
+                                    <div class="media-item">
+                                        <img src="images/projects/vipres/image2.png" alt="Dynamic object mapping capture image 2" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
+                                    <div class="media-item">
+                                        <img src="images/projects/vipres/image3.png" alt="Dynamic object mapping capture image 3" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
                                 </div>
 
                                 <h4 style="margin: 1.25rem 0 0.5rem; color: var(--color-gold);">Project specifics (360 camera)</h4>
                                 <p style="line-height: 1.6;">Working with a 360 camera pipeline where calibration, lens handling, and projection consistency are critical for reliable reconstruction and VR playback quality.</p>
-                                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.8rem;">
-                                    <img src="images/projects/vipres/proj/single_lens.png" alt="Single lens 360 capture setup" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    <img src="images/projects/vipres/proj/single_lens_equarectangular.png" alt="Single lens equirectangular projection" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
-                                    <img src="images/projects/vipres/proj/single_lens_rectalinear.png" alt="Single lens rectilinear projection" style="width: 224px; height: 224px; object-fit: cover; border-radius: 8px; border: 2px solid var(--color-gold); cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                <div class="media-strip" style="margin-top: 0.8rem;">
+                                    <div class="media-item" style="width: min(360px, 78vw);">
+                                        <img src="images/projects/vipres/proj/single_lens.png" alt="Single lens 360 capture setup" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
+                                    <div class="media-item" style="width: min(360px, 78vw);">
+                                        <img src="images/projects/vipres/proj/single_lens_equarectangular.png" alt="Single lens equirectangular projection" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
+                                    <div class="media-item" style="width: min(360px, 78vw);">
+                                        <img src="images/projects/vipres/proj/single_lens_rectalinear.png" alt="Single lens rectilinear projection" class="media-frame" style="cursor: pointer;" onclick="openImageModal(this.src, this.alt)">
+                                    </div>
                                 </div>
                             </div>
                         </details>
@@ -1380,15 +1448,17 @@
                             <p style="line-height: 1.6;">Research and engineering work enabling rich tactile feedback on touchscreen surfaces.</p>
                         </div>
 
-                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                        <details open style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
                             <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project media</summary>
                             <div style="margin-top: 0.9rem;">
                                 <h4 style="margin-bottom: 0.5rem; color: var(--color-gold);">Presentations</h4>
-                                <div style="margin-top: 0.75rem;">
-                                    <video controls preload="metadata" style="width: 100%; max-width: 900px; border-radius: 10px; border: 2px solid var(--color-gold); background: rgba(0,0,0,0.4);">
-                                        <source src="images/projects/google-demo-2026.mp4" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
+                                <div class="media-strip" style="margin-top: 0.75rem;">
+                                    <div class="media-item" style="width: min(900px, 90vw);">
+                                        <video controls preload="metadata" class="media-frame">
+                                            <source src="images/projects/google-demo-2026.mp4" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
                                 </div>
 
                                 <h4 style="margin: 1.25rem 0 0.5rem; color: var(--color-gold);">Engineering behind the technology</h4>
@@ -1411,10 +1481,18 @@
                             <p style="line-height: 1.6;">Reinforcement learning projects focusing on control systems and autonomous decision-making, including cart-pendulum balancing and car racing environments.</p>
                         </div>
 
-                        <details style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
+                        <details open style="margin-top: 1rem; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 0.8rem; background: rgba(255, 255, 255, 0.02);">
                             <summary style="cursor: pointer; color: var(--color-gold); font-weight: 600;">Project media</summary>
                             <div style="margin-top: 0.9rem;">
-                                <p style="line-height: 1.6; color: var(--color-text-light); margin-bottom: 0;">Media coming soon.</p>
+                                <p style="line-height: 1.6; color: var(--color-text-light); margin-bottom: 0.75rem;">Training run (episode 2700).</p>
+                                <div class="media-strip">
+                                    <div class="media-item" style="width: min(900px, 90vw);">
+                                        <video controls preload="metadata" class="media-frame">
+                                            <source src="images/projects/rl-video-episode-2700.mp4" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                </div>
                             </div>
                         </details>
 
