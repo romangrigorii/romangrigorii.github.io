@@ -7,6 +7,9 @@
     <script>document.documentElement.classList.remove('no-js');</script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
     <style>
         :root {
             /* Dark Mode Colors - Professional & Cold */
@@ -1050,6 +1053,144 @@
             font-size: 0.9rem;
             color: var(--color-text-light);
         }
+
+        /* Blog */
+        a.blog-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .blog-card h3 {
+            color: var(--color-gold);
+            font-size: 1.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .blog-date {
+            color: var(--color-gold-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .blog-card .blog-summary {
+            color: var(--color-beige);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .blog-read {
+            color: var(--color-gold);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .blog-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--color-gold);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.75rem;
+            border: 2px solid var(--color-gold);
+            padding: 0.7rem 1.1rem;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .blog-back-btn:hover {
+            background: var(--color-gold);
+            color: var(--color-black);
+        }
+
+        .blog-article h2 {
+            color: var(--color-gold);
+            margin-bottom: 0.4rem;
+        }
+
+        .blog-article {
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .blog-article p,
+        .blog-article li {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--color-beige);
+        }
+
+        .blog-article ul,
+        .blog-article ol {
+            margin: 0 0 1.5rem 1.4rem;
+        }
+
+        .blog-article h3,
+        .blog-article h4 {
+            color: var(--color-gold);
+            margin-top: 1.8rem;
+        }
+
+        .blog-article a {
+            color: var(--color-gold);
+            font-weight: 500;
+        }
+
+        .blog-article blockquote {
+            margin: 0 0 1.5rem;
+            padding: 0.2rem 0 0.2rem 1rem;
+            border-left: 3px solid var(--color-gold);
+            color: var(--color-text-light);
+        }
+
+        .blog-article code {
+            font-size: 0.92em;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+        }
+
+        .blog-article pre {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(139, 157, 195, 0.3);
+            border-radius: 6px;
+            padding: 1rem 1.2rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-article pre code {
+            padding: 0;
+            background: transparent;
+        }
+
+        .blog-article img {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 2px solid var(--color-gold);
+            margin: 0.5rem 0 1.5rem;
+        }
+
+        .blog-article .katex,
+        .blog-article .katex-display {
+            color: var(--color-beige);
+        }
+
+        .blog-article .katex-display {
+            margin: 1.25rem 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
     </style>
 </head>
 <body>
@@ -1150,11 +1291,12 @@
 
             <!-- Navigation -->
             <div class="nav-buttons">
-                <button class="nav-btn active" onclick="showContent('home')">Home</button>
-                <button class="nav-btn" onclick="showContent('research')">Research</button>
-                <button class="nav-btn" onclick="showContent('books')">Books</button>
-                <button class="nav-btn" onclick="showContent('projects')">Projects</button>
-                <button class="nav-btn" onclick="showContent('business')">Business</button>
+                <button class="nav-btn active" data-section="home" onclick="showContent('home')">Home</button>
+                <button class="nav-btn" data-section="research" onclick="showContent('research')">Research</button>
+                <button class="nav-btn" data-section="books" onclick="showContent('books')">Books</button>
+                <button class="nav-btn" data-section="blog" onclick="showContent('blog')">Blog</button>
+                <button class="nav-btn" data-section="projects" onclick="showContent('projects')">Projects</button>
+                <button class="nav-btn" data-section="business" onclick="showContent('business')">Business</button>
             </div>
 
             <!-- Contact Section -->
@@ -1389,6 +1531,36 @@
                         <i class="fas fa-file-pdf"></i>
                         Read PDF
                     </a>
+                </div>
+            </div>
+
+            <!-- Blog Content -->
+            <div id="blog-content" class="content-section">
+                <div id="blog-list-view">
+                    <h2>Blog</h2>
+                    <p>Notes on robotics, wireless systems, and building hardware that has to work in the world.</p>
+                    <div id="blog-list">
+                        <a class="card blog-card" href="#blog/starting-this-notebook">
+                            <h3>Why Judge Models Might Be More Useful Than Bigger Models</h3>
+                            <p class="blog-date">September 24, 2026</p>
+                            <p class="blog-summary">Bounded judgments, calibrated confidence, and why a small decision model can be more useful than a larger reasoning model.</p>
+                            <span class="blog-read">
+                                <i class="fas fa-arrow-right"></i>
+                                Read post
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div id="blog-post-view" hidden>
+                    <a href="#blog" class="blog-back-btn" id="blog-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to blogs
+                    </a>
+                    <article class="blog-article card">
+                        <p class="blog-date" id="blog-post-date"></p>
+                        <h2 id="blog-post-title"></h2>
+                        <div id="blog-post-body"></div>
+                    </article>
                 </div>
             </div>
 
@@ -1631,28 +1803,45 @@
     </div>
 
     <script>
-        function showContent(section) {
-            // Hide all content sections
-            const contentSections = document.querySelectorAll('.content-section');
-            contentSections.forEach(section => section.classList.remove('active'));
-            
-            // Show selected section
-            document.getElementById(section + '-content').classList.add('active');
-            
-            // Update navigation buttons
-            const navButtons = document.querySelectorAll('.nav-btn');
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Hide work history when navigating
+        function hideWorkHistory() {
             const workHistory = document.getElementById('work-history');
             const workHistoryIcon = document.getElementById('work-history-icon');
-            if (workHistory.style.display === 'block') {
+            if (workHistory && workHistory.style.display === 'block') {
                 workHistory.style.display = 'none';
                 workHistoryIcon.className = 'fas fa-chevron-down';
                 workHistoryIcon.style.transform = 'rotate(0deg)';
             }
+        }
 
+        function activateSection(section) {
+            const contentSections = document.querySelectorAll('.content-section');
+            contentSections.forEach(item => item.classList.remove('active'));
+
+            const next = document.getElementById(section + '-content');
+            if (next) next.classList.add('active');
+
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.section === section);
+            });
+
+            hideWorkHistory();
+        }
+
+        function showContent(section) {
+            activateSection(section);
+
+            if (section === 'blog') {
+                const listView = document.getElementById('blog-list-view');
+                const postView = document.getElementById('blog-post-view');
+                if (listView) listView.hidden = false;
+                if (postView) postView.hidden = true;
+                if (location.hash !== '#blog') {
+                    try { history.pushState({ view: 'blog-list' }, '', '#blog'); } catch (e) {}
+                }
+            } else if (location.hash.startsWith('#blog')) {
+                try { history.pushState({}, '', location.pathname + location.search); } catch (e) {}
+            }
         }
 
         function openImageModal(src, alt) {
@@ -1710,9 +1899,286 @@
             }
         }
 
+        // Add a blog post by appending an entry to content/blog/posts.json
+        // and creating content/blog/<slug>.md (LaTeX commands and math are supported;
+        // .tex and .html also work)
+        let blogPosts = [];
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function formatBlogDate(isoDate) {
+            const parsed = new Date(isoDate + 'T00:00:00');
+            if (Number.isNaN(parsed.getTime())) return isoDate;
+            return parsed.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function getBlogSlugFromHash() {
+            const match = location.hash.match(/^#blog(?:\/([^/?#]+))?$/);
+            return match ? (match[1] || '') : null;
+        }
+
+        function renderBlogList() {
+            const list = document.getElementById('blog-list');
+            if (!list) return;
+
+            if (!blogPosts.length) {
+                list.innerHTML = '<p>No posts yet.</p>';
+                return;
+            }
+
+            list.innerHTML = blogPosts.map(post => `
+                <a class="card blog-card" href="#blog/${encodeURIComponent(post.slug)}">
+                    <h3>${escapeHtml(post.title)}</h3>
+                    <p class="blog-date">${escapeHtml(formatBlogDate(post.date))}</p>
+                    <p class="blog-summary">${escapeHtml(post.summary || '')}</p>
+                    <span class="blog-read">
+                        <i class="fas fa-arrow-right"></i>
+                        Read post
+                    </span>
+                </a>
+            `).join('');
+        }
+
+        async function loadBlogPosts() {
+            try {
+                const res = await fetch('content/blog/posts.json', { cache: 'no-cache' });
+                if (!res.ok) throw new Error('Failed to load posts.json');
+                const loaded = await res.json();
+                if (!Array.isArray(loaded) || !loaded.length) throw new Error('No posts');
+                blogPosts = loaded;
+                renderBlogList();
+            } catch (e) {
+                blogPosts = [{
+                    slug: 'starting-this-notebook',
+                    title: 'Why Judge Models Might Be More Useful Than Bigger Models',
+                    date: '2026-09-24',
+                    summary: 'Bounded judgments, calibrated confidence, and why a small decision model can be more useful than a larger reasoning model.'
+                }];
+                if (!document.querySelector('#blog-list .blog-card')) {
+                    renderBlogList();
+                }
+            }
+        }
+
+        function blogContentPath(filename) {
+            return 'content/blog/' + String(filename).replace(/^.*[\\/]/, '');
+        }
+
+        function extractLatexMath(source) {
+            const parts = [];
+            let text = source.replace(/\$\$([\s\S]+?)\$\$/g, function(_, tex) {
+                const token = '%%BLOGMATH' + parts.length + '%%';
+                parts.push({ tex: tex.trim(), display: true });
+                return '\n\n' + token + '\n\n';
+            });
+            text = text.replace(/\\\(([\s\S]+?)\\\)/g, function(_, tex) {
+                const token = '%%BLOGMATH' + parts.length + '%%';
+                parts.push({ tex: tex.trim(), display: false });
+                return token;
+            });
+            return { text: text, parts: parts };
+        }
+
+        function replaceLatexBraced(text, command, replacer) {
+            const token = '\\' + command;
+            let result = '';
+            let i = 0;
+            while (i < text.length) {
+                const idx = text.indexOf(token, i);
+                if (idx === -1) {
+                    result += text.slice(i);
+                    break;
+                }
+                result += text.slice(i, idx);
+                let pos = idx + token.length;
+                if (text.charAt(pos) === '*') pos += 1;
+                if (text.charAt(pos) !== '{') {
+                    result += text.slice(idx, pos);
+                    i = pos;
+                    continue;
+                }
+                pos += 1;
+                let depth = 1;
+                const start = pos;
+                while (pos < text.length && depth > 0) {
+                    const ch = text.charAt(pos);
+                    if (ch === '{') depth += 1;
+                    else if (ch === '}') depth -= 1;
+                    pos += 1;
+                }
+                result += replacer(text.slice(start, pos - 1));
+                i = pos;
+            }
+            return result;
+        }
+
+        function convertLatexStructure(text) {
+            let next = text;
+            next = next.replace(/\\begin\{quote\}([\s\S]*?)\\end\{quote\}/g, function(_, inner) {
+                return '\n\n<blockquote>' + inner.trim() + '</blockquote>\n\n';
+            });
+            next = next.replace(/\\begin\{(itemize|enumerate)\}([\s\S]*?)\\end\{\1\}/g, function(_, type, body) {
+                const items = body.split(/\\item\s*/).map(function(item) {
+                    return item.trim();
+                }).filter(Boolean);
+                if (type === 'enumerate') {
+                    return '\n\n' + items.map(function(item, index) {
+                        return (index + 1) + '. ' + item;
+                    }).join('\n') + '\n\n';
+                }
+                return '\n\n' + items.map(function(item) {
+                    return '- ' + item;
+                }).join('\n') + '\n\n';
+            });
+            next = replaceLatexBraced(next, 'section', function(inner) {
+                return '\n\n## ' + inner + '\n\n';
+            });
+            next = replaceLatexBraced(next, 'subsection', function(inner) {
+                return '\n\n### ' + inner + '\n\n';
+            });
+            next = replaceLatexBraced(next, 'subsubsection', function(inner) {
+                return '\n\n#### ' + inner + '\n\n';
+            });
+            next = replaceLatexBraced(next, 'textbf', function(inner) {
+                return '**' + inner + '**';
+            });
+            next = replaceLatexBraced(next, 'textit', function(inner) {
+                return '*' + inner + '*';
+            });
+            next = replaceLatexBraced(next, 'emph', function(inner) {
+                return '*' + inner + '*';
+            });
+            next = replaceLatexBraced(next, 'texttt', function(inner) {
+                return '`' + inner + '`';
+            });
+            next = next.replace(/``/g, '\u201C').replace(/''/g, '\u201D');
+            next = next.replace(/---/g, '\u2014').replace(/--/g, '\u2013');
+            next = next.replace(/\\%/g, '%');
+            next = next.replace(/~/g, ' ');
+            return next;
+        }
+
+        function renderLatexMath(tex, display) {
+            if (window.katex) {
+                return katex.renderToString(tex, {
+                    displayMode: display,
+                    throwOnError: false
+                });
+            }
+            return display
+                ? '<pre class="blog-math">' + escapeHtml(tex) + '</pre>'
+                : '<code>' + escapeHtml(tex) + '</code>';
+        }
+
+        function renderBlogMarkup(source) {
+            const extracted = extractLatexMath(source);
+            let text = convertLatexStructure(extracted.text);
+            let title = null;
+            const leadingHeading = text.match(/^\s*##\s+(.+?)\s*(?:\n+|$)/);
+            if (leadingHeading) {
+                title = leadingHeading[1].trim();
+                text = text.slice(leadingHeading[0].length);
+            }
+
+            let html = renderBlogMarkdown(text);
+            extracted.parts.forEach(function(part, index) {
+                html = html.replace('%%BLOGMATH' + index + '%%', renderLatexMath(part.tex, part.display));
+            });
+            return { html: html, title: title };
+        }
+
+        function renderBlogMarkdown(markdown) {
+            if (window.marked && typeof marked.parse === 'function') {
+                return marked.parse(markdown);
+            }
+            return '<p>' + escapeHtml(markdown).replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+        }
+
+        async function loadBlogBody(post) {
+            const candidates = [];
+            if (post.file) candidates.push(blogContentPath(post.file));
+            candidates.push(blogContentPath(post.slug + '.md'));
+            candidates.push(blogContentPath(post.slug + '.tex'));
+            candidates.push(blogContentPath(post.slug + '.html'));
+
+            for (const path of candidates) {
+                const res = await fetch(path, { cache: 'no-cache' });
+                if (!res.ok) continue;
+                const text = await res.text();
+                if (path.endsWith('.html')) return { html: text, title: null };
+                return renderBlogMarkup(text);
+            }
+
+            throw new Error('Failed to load post');
+        }
+
+        async function openBlogPost(slug) {
+            const post = blogPosts.find(item => item.slug === slug);
+            const titleEl = document.getElementById('blog-post-title');
+            const dateEl = document.getElementById('blog-post-date');
+            const bodyEl = document.getElementById('blog-post-body');
+            const listView = document.getElementById('blog-list-view');
+            const postView = document.getElementById('blog-post-view');
+
+            if (!titleEl || !dateEl || !bodyEl || !listView || !postView) return;
+
+            listView.hidden = true;
+            postView.hidden = false;
+            titleEl.textContent = post ? post.title : 'Post not found';
+            dateEl.textContent = post ? formatBlogDate(post.date) : '';
+
+            if (!post) {
+                bodyEl.innerHTML = '<p>This post could not be found.</p>';
+                return;
+            }
+
+            try {
+                const loaded = await loadBlogBody(post);
+                if (loaded.title) titleEl.textContent = loaded.title;
+                bodyEl.innerHTML = loaded.html;
+            } catch (e) {
+                bodyEl.innerHTML = '<p>This post failed to load.</p>';
+            }
+
+            const blogSection = document.getElementById('blog-content');
+            if (blogSection) blogSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function syncBlogFromLocation() {
+            const slug = getBlogSlugFromHash();
+            if (slug === null) return;
+
+            activateSection('blog');
+            if (slug) {
+                openBlogPost(decodeURIComponent(slug));
+            } else {
+                const listView = document.getElementById('blog-list-view');
+                const postView = document.getElementById('blog-post-view');
+                if (listView) listView.hidden = false;
+                if (postView) postView.hidden = true;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             loadAboutMe();
+            loadBlogPosts().then(function() {
+                if (location.hash.startsWith('#blog')) {
+                    syncBlogFromLocation();
+                }
+            });
         });
+
+        window.addEventListener('hashchange', syncBlogFromLocation);
 
     </script>
 </body>
