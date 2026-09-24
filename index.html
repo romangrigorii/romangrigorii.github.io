@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="content/blog/sources.js"></script>
     <style>
         :root {
             /* Dark Mode Colors - Professional & Cold */
@@ -2092,7 +2093,8 @@
 
             let html = renderBlogMarkdown(text);
             extracted.parts.forEach(function(part, index) {
-                html = html.replace('%%BLOGMATH' + index + '%%', renderLatexMath(part.tex, part.display));
+                const rendered = renderLatexMath(part.tex, part.display);
+                html = html.replace('%%BLOGMATH' + index + '%%', function() { return rendered; });
             });
             return { html: html, title: title };
         }
@@ -2105,18 +2107,35 @@
         }
 
         async function loadBlogBody(post) {
+            const bundled = window.BLOG_SOURCES && window.BLOG_SOURCES[post.slug];
+            if (typeof bundled === 'string' && bundled.trim()) {
+                try {
+                    return renderBlogMarkup(bundled);
+                } catch (e) {
+                    return {
+                        html: '<p>' + escapeHtml(bundled).replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>',
+                        title: null
+                    };
+                }
+            }
+
             const candidates = [];
             if (post.file) candidates.push(blogContentPath(post.file));
+            candidates.push(blogContentPath(post.slug + '.txt'));
             candidates.push(blogContentPath(post.slug + '.md'));
             candidates.push(blogContentPath(post.slug + '.tex'));
             candidates.push(blogContentPath(post.slug + '.html'));
 
             for (const path of candidates) {
-                const res = await fetch(path, { cache: 'no-cache' });
-                if (!res.ok) continue;
-                const text = await res.text();
-                if (path.endsWith('.html')) return { html: text, title: null };
-                return renderBlogMarkup(text);
+                try {
+                    const res = await fetch(path, { cache: 'no-store' });
+                    if (!res.ok) continue;
+                    const text = await res.text();
+                    if (path.endsWith('.html')) return { html: text, title: null };
+                    return renderBlogMarkup(text);
+                } catch (e) {
+                    continue;
+                }
             }
 
             throw new Error('Failed to load post');
