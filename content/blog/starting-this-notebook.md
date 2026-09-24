@@ -1,500 +1,221 @@
-\section*{Why Judge Models Might Be More Useful Than Bigger Models}
+\section*{Why Judge Models Are Interesting}
 
-I spent some time last night working with Jev, TypeSafe AI's new ``System One'' model, and I think the interesting part is not really Jev itself. It is the idea behind it.
+I have been looking at Jev, TypeSafe AI's ``System One'' model, and I think the interesting part is less the model itself and more the kind of problem it is designed to solve.
 
-Most of the current LLM race is focused on making models better at reasoning. Give the model a difficult problem, let it think for longer, and hopefully get a better answer.
+Most frontier models are increasingly good at reasoning. You give them a complicated problem, let them think through it, and get back an explanation.
 
-That makes sense when the problem actually requires reasoning.
+But a lot of software does not need an explanation.
 
-But a surprisingly large amount of software does not need another model to write an essay. It needs a model to make a decision.
+It needs a decision.
 
-Is this spam?
+Imagine you run a company with a few thousand robots deployed in warehouses. Every day you receive hundreds of support reports:
 
-Is this lead actually interesting?
+\begin{quote}
+Robot stopped halfway through a route.
 
-Should this agent call tool A or tool B?
+Camera occasionally loses detections near the loading dock.
 
-Does this result need human review?
+Battery only lasts three hours.
 
-Which of these five categories does this belong to?
+Robot hit a pallet after someone moved it into the aisle.
+\end{quote}
 
-These are fundamentally different problems from asking a model to explain quantum mechanics or write a piece of software.
+You do not necessarily need a frontier reasoning model to write an analysis of every ticket.
 
-TypeSafe describes Jev as its first \emph{System One Model}, borrowing the terminology from Kahneman's distinction between fast, intuitive judgment and slower deliberative reasoning. Instead of generating arbitrary text, Jev accepts some state, answers bounded questions, and returns values that software can immediately act on.
-
-The interface is essentially built around three kinds of questions:
+The first thing you need is much simpler:
 
 $$
 \begin{aligned}
-\text{Noul} &:\quad \text{How likely is this statement to be true?}\\
-\text{Choice} &:\quad \text{Which option should I select?}\\
-\text{Score} &:\quad \text{Where does this fall on an ordered scale?}
+&\text{Is this urgent?}\\
+&\text{Is this probably hardware, software, or environment?}\\
+&\text{Should engineering look at it?}\\
+&\text{How confident are we?}
 \end{aligned}
 $$
 
-The API therefore behaves less like
+This is where judge models become interesting.
+
+Jev is designed around structured judgments rather than arbitrary text generation. Instead of asking
 
 $$
-\text{prompt}
+\text{``Analyze this support ticket.''}
+$$
+
+and then trying to extract a decision from three paragraphs of generated text, you can ask several bounded questions and receive structured answers with associated probabilities or confidence.
+
+Conceptually, the pipeline becomes
+
+$$
+\text{ticket}
 \rightarrow
-\text{paragraph}
+\text{judgments}
 \rightarrow
-\text{parse paragraph}
-\rightarrow
-\text{decision}
+\text{routing decision}.
 $$
 
-and more like
+For example:
 
 $$
-\text{state}
-\rightarrow
-\text{judgment}
-\rightarrow
-(\text{decision},\text{probabilities},\text{confidence}).
+P(\text{urgent})=0.96,
 $$
 
-That seems like a small distinction, but I think it matters a lot.
-
-\subsection*{The Interesting Part Is the Confidence}
-
-The structured output is useful, but the part I care about most is uncertainty.
-
-If a classifier tells me
-
 $$
-P(\text{pain})=0.97,
+\text{category}=\text{perception},
 $$
 
-I might be comfortable allowing software to act automatically.
-
-If it gives me
-
 $$
-P(\text{pain})=0.52,
+P(\text{requires engineering})=0.88.
 $$
 
-I probably want another model or a person to take a look.
+Now the software can actually do something with the result.
 
-That gives you a much more practical architecture:
+High-confidence perception failures might automatically enter the vision team's queue. Low-severity battery questions might go to support. Anything with low confidence can be sent to a person.
 
-$$
-\begin{gathered}
-\text{judgment}\\
-\downarrow\\
-\text{high confidence}
-\rightarrow
-\text{automatic action}\\
-\\
-\text{low confidence}
-\rightarrow
-\text{larger model / human review}.
-\end{gathered}
-$$
+That last part is probably the most useful.
 
-TypeSafe specifically trains Jev around calibrated decisions and returns probabilities and confidence with its structured outputs. Their intended workflow is exactly this: let software act above a threshold and escalate uncertain cases.
-
-There is an important caveat here.
-
-A confidence score is only useful if it is actually calibrated on something resembling your problem.
-
-If predictions made with \(90\%\) confidence are only correct \(60\%\) of the time on your data, the number is not helping you very much.
-
-So I would never take the confidence number at face value. I would measure it against my own evaluation set and determine where the useful operating thresholds actually are.
-
-\subsection*{The Problem I Wanted to Solve}
-
-The use case I was interested in was prospect qualification.
-
-One thing I have learned is that a company simply ``doing AI'' is not particularly useful information.
-
-Shipping an AI product is not pain.
-
-Hiring ML engineers is not pain.
-
-Putting ``AI-powered'' on the homepage is definitely not pain.
-
-What I actually want to find is evidence that something is going wrong.
-
-Maybe the company shipped an AI feature and users are complaining about it.
-
-Maybe an agent is producing bad outputs publicly.
-
-Maybe a feature had to be rolled back.
-
-Maybe the company is hiring heavily around evaluation, reliability, or observability immediately after shipping a new system.
-
-Those are much stronger signals.
-
-The important distinction is
+The goal does not need to be
 
 $$
-\boxed{
-\text{AI activity}
-\neq
-\text{AI pain}.
-}
+\text{AI makes every decision}.
 $$
 
-The problem is that finding those signals manually takes a lot of time.
-
-You might start with hundreds or thousands of companies, search through product launches, support threads, reviews, engineering posts, incidents, and customer complaints, and eventually find the handful that actually have a problem you might be able to solve.
-
-That sounded like exactly the kind of bounded judgment problem that should not require a frontier reasoning model for every decision.
-
-So I built the pipeline roughly as
+A much better system might be
 
 $$
-\text{company}
-\rightarrow
-\text{public evidence}
-\rightarrow
-\text{structured judgments}
-\rightarrow
-\text{confidence}
-\rightarrow
-\text{ranking}.
+\begin{aligned}
+\text{high confidence} &\rightarrow \text{automatic routing},\\
+\text{low confidence} &\rightarrow \text{human review}.
+\end{aligned}
 $$
 
-Instead of asking one enormous prompt,
+This is very different from trying to build one enormous agent that handles the entire support operation.
+
+\subsection*{Why Not Just Use a Big LLM?}
+
+You can.
+
+But imagine doing this for 50,000 events every day.
+
+A large reasoning model is useful when a ticket actually requires reasoning: comparing logs, understanding a strange failure, synthesizing several pieces of evidence, or proposing a fix.
+
+It is probably overkill for
 
 \begin{quote}
-Is this company a good prospect for us and why?
+Does this look like a battery issue?
 \end{quote}
 
-I decomposed the problem into smaller questions.
-
-Is there evidence of a real AI product?
-
-Is there evidence that it is currently causing problems?
-
-How severe does the problem appear to be?
-
-Is the evidence recent?
-
-Does the problem actually match something we solve?
-
-That decomposition turns one vague LLM task into several much narrower judgments.
-
-This is also close to how TypeSafe describes its workflow approach: break a business process into narrow model judgments and deterministic code rather than asking one model to reason through the entire process in a single prompt. Their published workflow evaluations are explicitly constructed this way.
-
-\subsection*{Version One Was Terrible}
-
-The first version agreed with my own labels about \(10\%\) of the time.
-
-Two out of twenty.
-
-Obviously useless.
-
-But that failure was probably the most valuable part of the exercise.
-
-Once I looked at the disagreements, I found two problems.
-
-The first was a hidden size filter. My pipeline was quietly rejecting companies that I personally considered strong targets.
-
-The second problem was more interesting.
-
-My ``pain detector'' was not detecting pain.
-
-It was detecting AI news.
-
-Those sound similar until you actually look at the output.
-
-$$
-\text{Company launches AI feature}
-$$
-
-is evidence of AI activity.
-
-$$
-\text{Company launches AI feature}
-+
-\text{users report failures}
-+
-\text{company rolls it back}
-$$
-
-is evidence of pain.
-
-The classifier was doing a reasonable job answering the wrong question.
-
-That reinforced something I think is extremely important when building agent systems:
-
-$$
-\boxed{
-\text{A model can execute the wrong specification extremely well.}
-}
-$$
-
-We have a tendency to blame the model whenever an AI system produces bad results.
-
-Sometimes the model is the problem.
-
-But sometimes the model is correctly optimizing exactly what we accidentally asked it to optimize.
-
-\subsection*{Golden Labels Are What Made the Failure Visible}
-
-The only reason I knew version one was bad was because I had already labeled examples myself.
-
-For a small set of companies, I already knew what I considered a strong prospect, a weak prospect, and something that should not qualify at all.
-
-Those became my golden labels.
-
-Without them, the output actually looked reasonable.
-
-That is the dangerous part.
-
-An LLM can produce twenty classifications with twenty convincing explanations and make the whole system feel intelligent.
-
-But
-
-$$
-\text{plausible output}
-\neq
-\text{correct system}.
-$$
-
-Once you have trusted labels, the development process becomes much more concrete:
-
-$$
-\text{prediction}
-\rightarrow
-\text{compare with label}
-\rightarrow
-\text{inspect disagreement}
-\rightarrow
-\text{change system}
-\rightarrow
-\text{evaluate again}.
-$$
-
-That is just ordinary machine learning evaluation, but I think agent development sometimes forgets it because the outputs look so convincing.
-
-My bar should not be
+or
 
 \begin{quote}
-These results look pretty good.
+Is this report urgent enough to wake someone up?
 \end{quote}
 
-It should be something measurable.
-
-For example,
+There are enormous numbers of these small fuzzy decisions inside real software systems:
 
 $$
-\text{agreement with human labels},
+\text{classify}
+\rightarrow
+\text{filter}
+\rightarrow
+\text{route}
+\rightarrow
+\text{escalate}.
 $$
 
-precision among the highest-ranked prospects, recall of known good prospects, and how accuracy changes as I increase the confidence threshold.
+Today we often solve them either with brittle rules or by throwing a general-purpose LLM at the entire problem.
 
-That last metric is especially important for a judge model.
+Judge models create an interesting middle ground.
 
-If confidence is useful, I should be able to say something like:
+They behave more like learned decision functions:
 
 $$
-\text{only automate predictions where }c>0.9
+f(x)
+\rightarrow
+(\text{decision},\text{confidence}).
 $$
 
-and see substantially better accuracy in that subset.
+That is a very useful primitive.
 
-Otherwise the confidence number is just decoration.
+\subsection*{The Important Catch}
 
-\subsection*{``No Hallucinations'' Needs a Qualification}
+Structured output does not mean the model cannot be wrong.
 
-One TypeSafe claim I would phrase carefully is that Jev has ``zero hallucinations.'' Their underlying point is legitimate but narrower than that phrase initially sounds. Jev's output space is defined in advance, so it cannot suddenly return a paragraph when the program expects an enum, invent a sixth option when there are five choices, or drift away from the requested schema. TypeSafe describes the absence of type errors as a property of the interface.
-
-That does \emph{not} mean the judgment must be correct.
-
-If the options are
+If the available answers are
 
 $$
 \{
-\text{high pain},
-\text{medium pain},
-\text{low pain}
+\text{hardware},
+\text{software},
+\text{environment}
 \},
 $$
 
-Jev will stay inside that set.
+a judge can reliably return one of those three values and still choose the wrong one.
 
-It can still confidently choose
-
-$$
-\text{high pain}
-$$
-
-when the correct answer is
-
-$$
-\text{low pain}.
-$$
-
-So I think the better distinction is
+So
 
 $$
 \boxed{
-\text{schema reliability}
+\text{valid output}
 \neq
-\text{semantic correctness}.
+\text{correct judgment}.
 }
 $$
 
-Both matter, but they are not the same thing.
+This is why the evaluation dataset matters so much.
 
-\subsection*{Why Not Just Use Claude or GPT?}
-
-You can absolutely use a general-purpose LLM for this.
-
-In fact, structured-output modes have made doing so much easier.
-
-The question is whether you actually need everything the larger model is capable of doing.
-
-A reasoning model is extremely useful when I need to synthesize several pieces of evidence, plan something, write code, analyze an ambiguous situation, or generate a new answer.
-
-But a production software system can contain thousands of much smaller branches:
+Before I let this fictional support system route production incidents, I would build a few hundred examples labeled by engineers:
 
 $$
-\text{classify},
-\quad
-\text{route},
-\quad
-\text{score},
-\quad
-\text{filter},
-\quad
-\text{verify},
-\quad
-\text{accept/reject}.
-$$
-
-Running a large reasoning model for every one of those branches can be a fairly expensive way of implementing a fuzzy \texttt{if} statement.
-
-This is where Jev becomes interesting.
-
-TypeSafe currently reports end-to-end latency of roughly \(70\)--\(500\) ms and an input price of $0.042 per million tokens. The company also reports much larger speed and cost advantages on its own workflow evaluations, although it explicitly notes that those results are workload-dependent and likely represent the higher end of expected gains.
-
-Those numbers may change. The architecture is the more interesting part.
-
-A judge becomes cheap enough that you can insert intelligence into places where you previously would have written a brittle rule.
-
-Instead of
-
-$$
-\texttt{if keyword == "refund"}
-$$
-
-you can start asking something closer to
-
-$$
-P(
-\text{customer is actually requesting a refund}
-\mid
-\text{conversation}
-).
-$$
-
-That is a very powerful software primitive.
-
-\subsection*{The Architecture I Find More Interesting}
-
-I do not think the future is
-
-$$
-\boxed{\text{one enormous LLM does everything}.}
-$$
-
-I think a more practical system increasingly looks like
-
-$$
-\begin{gathered}
-\text{deterministic code}
-\\
+\text{ticket}
 +
-\\
-\text{fast learned judgments}
-\\
+\text{correct category}
 +
-\\
-\text{reasoning models when reasoning is actually needed}
-\\
+\text{correct severity}.
+$$
+
+Then I would measure the judge against those labels.
+
+More importantly, I would measure accuracy as a function of confidence.
+
+If tickets above \(95\%\) confidence are almost always correct, automate those.
+
+If the model becomes unreliable below \(70\%\), send those to a person.
+
+At that point confidence becomes useful because it controls how much autonomy the system gets.
+
+\subsection*{The Bigger Idea}
+
+What I find interesting about judge models is that they suggest a different way to build AI systems.
+
+Not
+
+$$
+\boxed{\text{one huge model does everything}},
+$$
+
+but something closer to
+
+$$
+\text{code}
 +
-\\
-\text{humans when uncertainty or consequence is high}.
-\end{gathered}
-$$
-
-The judge does not replace the reasoning model.
-
-It decides when you need one.
-
-That separation is what I find compelling.
-
-You can imagine an agent loop where a cheap model is constantly answering questions such as
-
-$$
-\begin{aligned}
-&\text{Did the previous tool call succeed?}\\
-&\text{Is this result relevant?}\\
-&\text{Do we have enough information to continue?}\\
-&\text{Is this action risky?}\\
-&\text{Does this need human review?}\\
-&\text{Which tool should run next?}
-\end{aligned}
-$$
-
-and only escalating to an expensive reasoning model when the problem actually deserves it.
-
-At that point the judge is not really another chatbot.
-
-It becomes part of the control system.
-
-\subsection*{My Main Takeaway}
-
-The thing I took away from this experiment is not that Jev is going to replace Claude, GPT, or other frontier models.
-
-It is almost the opposite.
-
-I think we have been using general-purpose LLMs for a lot of jobs that do not require general-purpose generation.
-
-There is an important difference between
-
-$$
-\text{generate an answer}
-$$
-
-and
-
-$$
-\text{make a judgment}.
-$$
-
-Once those become separate primitives, you can build systems differently.
-
-Use code for things code is good at.
-
-Use a fast judge for fuzzy decisions.
-
-Use large reasoning models when the problem actually requires reasoning.
-
-Send uncertain or consequential cases to a person.
-
-And evaluate the entire thing against labels you trust.
-
-The more I work with these systems, the more I think the difficult part is becoming less about simply finding the ``smartest model'' and more about deciding exactly \emph{where intelligence belongs in the system}.
-
-A good judge is useful.
-
-A calibrated judge is much more useful.
-
-But neither matters very much if you do not have a good definition of what the correct judgment was supposed to be in the first place.
-
-$$
-\boxed{
-\text{better automation}
-=
-\text{better task definition}
+\text{fast judgments}
 +
-\text{better judgments}
+\text{reasoning models}
 +
-\text{better evaluation}.
-}
+\text{humans}.
 $$
+
+Use normal software when the rule is deterministic.
+
+Use a judge when the decision is fuzzy but narrow.
+
+Use a larger model when the problem actually requires reasoning.
+
+Use a person when uncertainty or consequence is high.
+
+That feels much closer to how I expect practical agent systems to be built.
+
+The interesting question may not be which model is smartest.
+
+It may be figuring out exactly how much intelligence each decision actually needs.

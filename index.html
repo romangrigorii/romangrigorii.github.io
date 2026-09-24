@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-    <script src="content/blog/sources.js"></script>
     <style>
         :root {
             /* Dark Mode Colors - Professional & Cold */
@@ -1539,7 +1538,7 @@
             <div id="blog-content" class="content-section">
                 <div id="blog-list-view">
                     <h2>Blog</h2>
-                    <p>Notes on robotics, wireless systems, and building hardware that has to work in the world.</p>
+                    <p>My personal notes with thoughts on AI, robotics, and other topics.</p>
                     <div id="blog-list">
                         <a class="card blog-card" href="#blog/starting-this-notebook">
                             <h3>Why Judge Models Might Be More Useful Than Bigger Models</h3>
@@ -2107,21 +2106,8 @@
         }
 
         async function loadBlogBody(post) {
-            const bundled = window.BLOG_SOURCES && window.BLOG_SOURCES[post.slug];
-            if (typeof bundled === 'string' && bundled.trim()) {
-                try {
-                    return renderBlogMarkup(bundled);
-                } catch (e) {
-                    return {
-                        html: '<p>' + escapeHtml(bundled).replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>',
-                        title: null
-                    };
-                }
-            }
-
             const candidates = [];
             if (post.file) candidates.push(blogContentPath(post.file));
-            candidates.push(blogContentPath(post.slug + '.txt'));
             candidates.push(blogContentPath(post.slug + '.md'));
             candidates.push(blogContentPath(post.slug + '.tex'));
             candidates.push(blogContentPath(post.slug + '.html'));
